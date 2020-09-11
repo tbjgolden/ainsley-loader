@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{99:function(a){a.exports=JSON.parse('{"allTagsPath":"/ainsley-loader/blog/tags","slug":"tbjgolden","name":"tbjgolden","count":1,"permalink":"/ainsley-loader/blog/tags/tbjgolden"}')}}]);
