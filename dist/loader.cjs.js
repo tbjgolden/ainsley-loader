@@ -38,9 +38,7 @@ function _default(content) {
     return getConfig(configString, _ainsley.defaultGetConfig);
   };
 
-  console.log("a");
   (0, _ainsley.flatten)(inputAinsley, wrappedGetConfig).then(function (flatAinsley) {
-    console.log("b");
     var optsStr = "";
 
     if (config && config.generate) {
@@ -55,7 +53,6 @@ function _default(content) {
       optsStr += "}";
     }
 
-    console.log("c");
     callback(null, "\n        import { generate, embed } from \"ainsley/dist/ainsley.client.esm.js\";\n        const css = generate(".concat(JSON.stringify((0, _ainsley.minify)(flatAinsley))).concat(optsStr, ");\n        embed(css);\n        if (document.body.style.visibility === \"hidden\") {\n          document.body.style.visibility = \"\";\n        } else {\n          console.warn(\"Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).\");\n        }\n        "));
   });
 }
