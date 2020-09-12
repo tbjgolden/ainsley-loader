@@ -2,7 +2,8 @@
   "name": "ainsley-loader",
   "version": "0.0.0-beta.1",
   "description": "A webpack module to load ainsley files.",
-  "module": "src/loader.js",
+  "module": "dist/loader.esm.js",
+  "main": "dist/loader.cjs.js",
   "scripts": {
     "test": "jest"
   },
@@ -27,6 +28,11 @@
     "src",
     ".gitignore"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "node scripts/compile.js && git add --all"
+    }
+  },
   "dependencies": {
     "loader-utils": "^2.0.0"
   },
@@ -34,13 +40,14 @@
     "ainsley": ">=1.2.7"
   },
   "devDependencies": {
-    "ainsley": "1.2.7",
-    "csso": "^4.0.3",
-    "isomorphic-unfetch": "^3.0.0",
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
+    "ainsley": "1.2.7",
     "babel-jest": "^26.3.0",
     "babel-loader": "^8.1.0",
+    "csso": "^4.0.3",
+    "husky": "^4.3.0",
+    "isomorphic-unfetch": "^3.0.0",
     "jest": "^26.4.2",
     "memory-fs": "^0.5.0",
     "webpack": "^5.0.0-beta.30"
