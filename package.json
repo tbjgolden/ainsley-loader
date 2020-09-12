@@ -1,7 +1,8 @@
 {
   "name": "ainsley-loader",
-  "version": "0.0.1-beta.1",
+  "version": "1.0.0",
   "description": "A webpack module to load ainsley files.",
+  "module": "src/loader.js",
   "scripts": {
     "test": "jest"
   },
@@ -23,7 +24,7 @@
   },
   "license": "MIT",
   "files": [
-    "index.js",
+    "src",
     ".gitignore"
   ],
   "dependencies": {
