@@ -14,8 +14,11 @@ export default function(content) {
     getConfig(configString, defaultGetConfig)
   ));
 
+  console.log("a")
+
   flatten(inputAinsley, wrappedGetConfig)
     .then(flatAinsley => {
+      console.log("b")
       let optsStr = "";
       if (config && config.generate) {
         optsStr = ", {";
@@ -26,6 +29,7 @@ export default function(content) {
         optsStr += "}";
       }
 
+      console.log("c")
       callback(
         null,
         `
