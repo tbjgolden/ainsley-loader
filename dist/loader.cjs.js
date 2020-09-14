@@ -59,7 +59,7 @@ function _default(content) {
       optsStr += "}";
     }
 
-    callback(null, "\n        import { generate, embed } from \"ainsley/dist/ainsley.client.esm.js\";\n        const css = generate(".concat(JSON.stringify((0, _ainsley.minify)(flatAinsley))).concat(optsStr, ");\n        embed(css, ").concat(JSON.stringify(uid), ");\n        if (document.body.style.visibility === \"hidden\") {\n          document.body.style.visibility = \"\";\n        } else {\n          console.warn(\"Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).\");\n        }\n        "));
+    callback(null, "\n        import { generate, embed } from \"ainsley/dist/ainsley.client.esm.js\";\n        const css = generate(".concat(JSON.stringify((0, _ainsley.minify)(flatAinsley))).concat(optsStr, ");\n        embed(css, ").concat(JSON.stringify("uid".concat(uid)), ");\n        if (document.body.style.visibility === \"hidden\") {\n          document.body.style.visibility = \"\";\n        } else {\n          console.warn(\"Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).\");\n        }\n        "));
   });
 }
 

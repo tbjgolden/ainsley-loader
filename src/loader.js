@@ -36,7 +36,7 @@ export default function(content) {
         `
         import { generate, embed } from "ainsley/dist/ainsley.client.esm.js";
         const css = generate(${JSON.stringify(minify(flatAinsley))}${optsStr});
-        embed(css, ${JSON.stringify(uid)});
+        embed(css, ${JSON.stringify(`uid${uid}`)});
         if (document.body.style.visibility === "hidden") {
           document.body.style.visibility = "";
         } else {
