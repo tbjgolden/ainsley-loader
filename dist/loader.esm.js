@@ -30,18 +30,20 @@ export default function(content) {
         null,
         `
         ${
-          config && config.cjs === true ? (
+          config && config.ssr === true ? (
             `const { generate, embed } = require("ainsley/dist/ainsley.client.development.js");`
           ) : (
             `import { generate, embed } from "ainsley/dist/ainsley.client.esm.js";`
           )
         }
-        const css = generate(${JSON.stringify(minify(flatAinsley))}${optsStr});
-        embed(css);
-        if (document.body.style.visibility === "hidden") {
-          document.body.style.visibility = "";
-        } else {
-          console.warn("Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).");
+        if (typeof window !== "undefined") {
+          const css = generate(${JSON.stringify(minify(flatAinsley))}${optsStr});
+          embed(css);
+          if (document.body.style.visibility === "hidden") {
+            document.body.style.visibility = "";
+          } else {
+            console.warn("Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).");
+          }
         }
         `
       );
