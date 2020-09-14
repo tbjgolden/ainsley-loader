@@ -9,6 +9,8 @@ var _ainsley = require("ainsley");
 
 var _loaderUtils = _interopRequireDefault(require("loader-utils"));
 
+var _cryptoHash = require("crypto-hash");
+
 var _json = _interopRequireDefault(require("json5"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -38,22 +40,26 @@ function _default(content) {
     return getConfig(configString, _ainsley.defaultGetConfig);
   };
 
-  (0, _ainsley.flatten)(inputAinsley, wrappedGetConfig).then(function (flatAinsley) {
+  Promise.all([(0, _ainsley.flatten)(inputAinsley, wrappedGetConfig), (0, _cryptoHash.sha256)(this.resourcePath)]).then(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        flatAinsley = _ref2[0],
+        uid = _ref2[1];
+
     var optsStr = "";
 
     if (config && config.generate) {
       optsStr = ", {";
-      Object.entries(config.generate).forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            k = _ref2[0],
-            v = _ref2[1];
+      Object.entries(config.generate).forEach(function (_ref3) {
+        var _ref4 = _slicedToArray(_ref3, 2),
+            k = _ref4[0],
+            v = _ref4[1];
 
         optsStr += "".concat(JSON.stringify(k), ":").concat(v.toString(), ",");
       });
       optsStr += "}";
     }
 
-    callback(null, "\n        ".concat(config && config.ssr === true ? "const { generate, embed } = require(\"ainsley/dist/ainsley.client.development.js\");" : "import { generate, embed } from \"ainsley/dist/ainsley.client.esm.js\";", "\n        if (typeof window !== \"undefined\") {\n          const css = generate(").concat(JSON.stringify((0, _ainsley.minify)(flatAinsley))).concat(optsStr, ");\n          embed(css);\n          if (document.body.style.visibility === \"hidden\") {\n            document.body.style.visibility = \"\";\n          } else {\n            console.warn(\"Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).\");\n          }\n        }\n        "));
+    callback(null, "\n        import { generate, embed } from \"ainsley/dist/ainsley.client.esm.js\";\n        const css = generate(".concat(JSON.stringify((0, _ainsley.minify)(flatAinsley))).concat(optsStr, ");\n        embed(css, ").concat(JSON.stringify(uid), ");\n        if (document.body.style.visibility === \"hidden\") {\n          document.body.style.visibility = \"\";\n        } else {\n          console.warn(\"Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).\");\n        }\n        "));
   });
 }
 

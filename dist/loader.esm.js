@@ -1,6 +1,8 @@
 import { defaultGetConfig, flatten, minify } from 'ainsley';
 import loaderUtils from 'loader-utils';
+import { sha256 } from 'crypto-hash';
 import JSON5 from 'json5';
+
 
 export default function(content) {
   const config = loaderUtils.getOptions(this);
@@ -14,8 +16,11 @@ export default function(content) {
     getConfig(configString, defaultGetConfig)
   ));
 
-  flatten(inputAinsley, wrappedGetConfig)
-    .then(flatAinsley => {
+  Promise.all([
+    flatten(inputAinsley, wrappedGetConfig),
+    sha256(this.resourcePath)
+  ])
+    .then(([flatAinsley, uid]) => {
       let optsStr = "";
       if (config && config.generate) {
         optsStr = ", {";
@@ -29,21 +34,13 @@ export default function(content) {
       callback(
         null,
         `
-        ${
-          config && config.ssr === true ? (
-            `const { generate, embed } = require("ainsley/dist/ainsley.client.development.js");`
-          ) : (
-            `import { generate, embed } from "ainsley/dist/ainsley.client.esm.js";`
-          )
-        }
-        if (typeof window !== "undefined") {
-          const css = generate(${JSON.stringify(minify(flatAinsley))}${optsStr});
-          embed(css);
-          if (document.body.style.visibility === "hidden") {
-            document.body.style.visibility = "";
-          } else {
-            console.warn("Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).");
-          }
+        import { generate, embed } from "ainsley/dist/ainsley.client.esm.js";
+        const css = generate(${JSON.stringify(minify(flatAinsley))}${optsStr});
+        embed(css, ${JSON.stringify(uid)});
+        if (document.body.style.visibility === "hidden") {
+          document.body.style.visibility = "";
+        } else {
+          console.warn("Add 'visibility: hidden' to the body tag's styles to avoid Flash of Unstyled Content (FOUC).");
         }
         `
       );
