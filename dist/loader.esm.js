@@ -29,7 +29,13 @@ export default function(content) {
       callback(
         null,
         `
-        import { generate, embed } from "ainsley/dist/ainsley.client.esm.js";
+        ${
+          config && config.cjs === true ? (
+            `const { generate, embed } = require("ainsley/dist/ainsley.client.development.js");`
+          ) : (
+            `import { generate, embed } from "ainsley/dist/ainsley.client.esm.js";`
+          )
+        }
         const css = generate(${JSON.stringify(minify(flatAinsley))}${optsStr});
         embed(css);
         if (document.body.style.visibility === "hidden") {
